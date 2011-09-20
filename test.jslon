@@ -1,0 +1,54 @@
+{
+	//Keys
+	literal: "literal"
+	"double": "double"
+	'single': "single"
+	"line continue\
+heeee": "line continueheeee"
+	"inline\x20hex": "inline hex"
+	
+	//Strings
+	str1: "double quotes"
+	str2: 'single quotes'
+	str3: "line\
+continue"
+	str4: "escapes\1\2\x40 \400"
+	
+	//Numbers
+	num1: 123
+	num2: 1.1
+	num3: .
+	num4: .1
+	num5: 1.
+	num6: 1e10
+	num7: 1e-5
+	num8: -15
+	hex1: 0x1
+	hex2: 0x0000000a
+	oct1: 07
+	oct2: 010
+	oct3: 00000050
+	
+	//Regex
+	regex: /123\/a\n%%?/
+	
+	//Array
+	arr1: [
+		"hi", 1, 2, 3, /regex/, {hi:"hi"}, [1,2], 5
+	]
+	arr2: [ 1 2 c 4 ]
+	
+	//Object
+	obj: { abc: "def" }
+	
+	//Literals
+	Infinity:  Infinity
+	NaN:       NaN
+	true:      true
+	false:     false
+	null:      null
+	undefined: undefined
+	
+	//Duplicate
+	dup: 1, dup: 2
+}
