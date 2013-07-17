@@ -50,36 +50,36 @@ valid JSON (however it allows RegExp where strict JSON does not).
 Options:
 *) quotes: ' or " (default)
 *) keyQuotes: true (default)/false
-  true if keys are always quoted
+   true if keys are always quoted
 *) numBase: 8, 10 (default), or 16
-  That is; octal, decimal, or hexadecimal, respectively. This does not affect
+   That is; octal, decimal, or hexadecimal, respectively. This does not affect
    floats, they're always written in decimal.
 *) strEscapes: cu (default)
-  String containing c(haracter) u(nicode) (he)x(idecimal) o(ctal short) or
+   String containing c(haracter) u(nicode) (he)x(idecimal) o(ctal short) or
    O(ctal long). Valid formatting: /(?=.)c?[oOx]?u?/
-  Essentially it regards the order as possibilities based on availability:
-  (In order)
-  If c is enabled and the character has a \c type escape, use that.
-  If o O or x is enabled and the character code is one byte (ie. < 256), use
+   Essentially it regards the order as possibilities based on availability:
+   (In order)
+   If c is enabled and the character has a \c type escape, use that.
+   If o O or x is enabled and the character code is one byte (ie. < 256), use
    the given escape form.
-  If u is enabled, use the unicode escape form.
-  Otherwise, drop character.
+   If u is enabled, use the unicode escape form.
+   Otherwise, drop character.
 Prettyprint options:
 *) entriesPerLine: 0 (default, meaning all), 1+
-  How many entries in an Array or Object should be on the same line.
+   How many entries in an Array or Object should be on the same line.
 *) openOwnLine: true/false (default)
-  Only refers to contents being on a different line as [ or {
-  (eg. in a list [1,2,{etc}] it's split at 1 and etc, but not before the {
+   Only refers to contents being on a different line as [ or {
+   (eg. in a list [1,2,{etc}] it's split at 1 and etc, but not before the {
 *) endOwnLine: true/false (default)
-  However if in a list, a comma may appear after.
+   However if in a list, a comma may appear after.
 *) keyOwnLine: true/false (default)
-  true if value and key are on different lines. Indents the data, as well.
+   true if value and key are on different lines. Indents the data, as well.
 *) spaceAfterKey: true/false (default)
-  Prints {"a": "hi"} instead of {"a":"hi"}
+   Prints {"a": "hi"} instead of {"a":"hi"}
 *) depth: "\t" (default)
-  The whitespace used to increase the depth. (Do not use non-whitespace chars)
+   The whitespace used to increase the depth. (Do not use non-whitespace chars)
 *) specific: null (default)
-  Object mimicing partial structure of obj, defining the above at specific
+   Object mimicing partial structure of obj, defining the above at specific
    points. Note subchilds must be an options structure with a specific entry
    for the subchild.
-  Options are inherited.
+   Options are inherited.
