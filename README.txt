@@ -1,11 +1,13 @@
 JavaScript Loose Object Notation
- * Copyright 2011 Wa (logicplace.com)
+ * Copyright 2011, 2013 Wa (logicplace.com)
  * MIT Licensed
 
 === HOW TO USE ===
 Browser: <script type="text/javascript" src="jslon.js"></script>
 	Access via global object JSLON
 Node.JS: var JSLON = require("jslon");
+Python (regular form): import JSLON
+Python (class form): from JSLON import JSLON
 
 === DESCRIPTION ===
 This is more akin to how objects can be defined inline in JavaScript than
