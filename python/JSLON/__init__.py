@@ -12,21 +12,18 @@ class undefined(object):
 
 class options(dict):
 	def __init__(self, opts = {}):
-		def default(name, default):
-			self[name] = opts[name] if name in opts else default
-		#enddef
-
-		default("quotes", '"')
-		default("keyQuotes", True)
-		default("numBase", 10)
-		default("strEscapes", "cu")
-		default("entriesPerLine", 0)
-		default("openOwnLine", False)
-		default("endOwnLine", False)
-		default("keyOwnLine", False)
-		default("spaceAfterKey", False)
-		default("depth", "\t")
-		default("specific", None)
+		self.update(opts)
+		self.setdefault("quotes",         '"')
+		self.setdefault("keyQuotes",      True)
+		self.setdefault("numBase",        10)
+		self.setdefault("strEscapes",     "cu")
+		self.setdefault("entriesPerLine", 0)
+		self.setdefault("openOwnLine",    False)
+		self.setdefault("endOwnLine",     False)
+		self.setdefault("keyOwnLine",     False)
+		self.setdefault("spaceAfterKey",  False)
+		self.setdefault("depth",          "\t")
+		self.setdefault("specific",       None)
 
 		# Ensure all "specific" entries are instantiations of options.
 		spec = self
@@ -256,7 +253,8 @@ class JSLON(object):
 			if len(parents) == 0:
 				raise SyntaxError("Ending " + name + " without a beginning.")
 			#endif
-			p[0] = parents.pop()
+			tmp = parents.pop()
+			if tmp is not None: p[0] = tmp
 		#enddef
 
 		def listget(ls, i):
@@ -316,12 +314,43 @@ class JSLON(object):
 		return self.__stringifyValue(self.data, options(opts))
 	#enddef
 
-	def __len__(self): return len(self.data)
-	def __getitem__(self, key): return self.data[key]
+	# Mutual stuff..
+	def __len__(self):                return len(self.data)
+	def __getitem__(self, key):       return self.data[key]
 	def __setitem__(self, key, data): self.data[key] = data
-	def __delitem__(self, key): del self.data[key]
-	def __iter__(self): return iter(self.data)
-	def __contains__(self, item): return item in self.data
+	def __delitem__(self, key):       del self.data[key]
+	def __iter__(self):               return iter(self.data)
+	def __contains__(self, item):     return item in self.data
+	def pop(self, i=-1):              return self.data.pop(i)
+
+	# List stuff..
+	def append(self, x):    return self.data.append(x)
+	def extend(self, L):    return self.data.extend(L)
+	def insert(self, i, x): return self.data.insert(i, x)
+	def remove(self, x):    return self.data.remove(x)
+	def index(self, x):     return self.data.index(x)
+	def count(self, x):     return self.data.count(x)
+	def sort(self):         return self.data.sort()
+	def reverse(self):      return self.reverse()
+
+	# Dict stuff..
+	def clear(self):                 return self.data.clear()
+	def copy(self):                  return self.data.copy()
+	def fromkeys(self, x, d=None):   return self.data.fromkeys(x, d)
+	def get(self, k, d=None):        return self.data.get(k, d)
+	def has_key(self, k):            return self.data.has_key(k)
+	def items(self):                 return self.data.items()
+	def iteritems(self):             return self.data.iteritems()
+	def iterkeys(self):              return self.data.iterkeys()
+	def itervalues(self):            return self.data.itervalues()
+	def keys(self):                  return self.data.keys()
+	def popitem(self):               return self.data.popitem()
+	def setdefault(self, k, d=None): return self.data.setdefault(k, d)
+	def update(self, x={}):          return self.data.update(x)
+	def values(self):                return self.data.values()
+	def viewitems(self):             return self.data.viewitems()
+	def viewkeys(self):              return self.data.viewkeys()
+	def viewvalues(self):            return self.data.viewvalues()
 #endclass
 
 def parse(string): return JSLON().parse(string).data
