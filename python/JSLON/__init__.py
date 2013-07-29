@@ -230,11 +230,11 @@ class JSLON(object):
 		else: raise Exception("Cannot encode type %s as JSON." % objtype.__name__)
 	#enddef
 
-	def parse(self, string):
+	def parse(self, string, types={}):
 		parents, p = [], [None, None]
 		# p is cur, curIdx
 
-		def setval(x, key=None, p=p):
+		def setval(x, key=None, p=p, dl=False):
 			if key == ":":
 				p[1] = str(x)
 			else:
@@ -242,7 +242,7 @@ class JSLON(object):
 					p[0][p[1]] = x
 					p[1] = None
 				elif p[0] is not None: p[0].append(x)
-				if type(x) in [dict, list]:
+				if dl:
 					parents.append(p[0])
 					p[0] = x
 				#endif
@@ -270,8 +270,8 @@ class JSLON(object):
 
 			if flow:
 				if   flow == ":": continue # Already handled
-				elif flow == "{": setval({})
-				elif flow == "[": setval([])
+				elif flow == "{": setval(types.get("dict", dict)(), dl=True)
+				elif flow == "[": setval(types.get("list", list)(), dl=True)
 				elif flow == "}": up("brace")
 				elif flow == "]": up("bracket")
 				elif flow == ",":
@@ -279,30 +279,30 @@ class JSLON(object):
 				#endif
 			elif regex:
 				# In Python, the global flag isn't considered.
-				setval(re.compile(
+				setval(types.get("regex", re.compile)(
 					regex.replace(r'\/', "/"),
 					(re.I if "i" in reflags else 0) | (re.M if "m" in reflags else 0)
 				))
-			elif string: setval(JSLON.__unescapeString(string), listget(tokens, i + 1)[0])
-			elif hexnum: setval(int(hexnum, 16))
+			elif string: setval(types.get("string", unicode)(JSLON.__unescapeString(string)), listget(tokens, i + 1)[0])
+			elif hexnum: setval(types.get("int", int)(int(hexnum, 16)))
 			elif afloat:
 				# Special case.
 				if afloat == ".": setval(0)
 				# In JavaScript, #.0* is int type, not float.
-				elif afloat.replace("0", "")[-1] == ".": setval(int(afloat[0:afloat.index(".")]))
-				else: setval(float(afloat))
+				elif afloat.replace("0", "")[-1] == ".": setval(types.get("int", int)(int(afloat[0:afloat.index(".")])))
+				else: setval(types.get("float", float)(float(afloat)))
 			elif num:
-				if num[0] == "0": setval(int(num, 8))
-				else: setval(int(num))
+				if num[0] == "0": setval(types.get("int", int)(int(num, 8)))
+				else: setval(types.get("int", int)(int(num)))
 			elif const:
 				nextFlow = listget(tokens, i + 1)[0]
-				iscol = nextFlow == ":"
-				if   const == "Infinity":  setval(const if iscol else float("inf"), nextFlow)
-				elif const == "NaN":       setval(const if iscol else float("nan"), nextFlow)
-				elif const == "true":      setval(const if iscol else True,         nextFlow)
-				elif const == "false":     setval(const if iscol else False,        nextFlow)
-				elif const == "null":      setval(const if iscol else None,         nextFlow)
-				elif const == "undefined": setval(const if iscol else undefined(),  nextFlow)
+				if nextFlow == ":": setval(const, nextFlow)
+				elif const == "Infinity":  setval(types.get("float", float)(float("inf")))
+				elif const == "NaN":       setval(types.get("float", float)(float("nan")))
+				elif const == "true":      setval(types.get("bool", bool)(True))
+				elif const == "false":     setval(types.get("bool", bool)(False))
+				elif const == "null":      setval(types.get("null", None))
+				elif const == "undefined": setval(types.get("undefined", undefined)())
 			#endif
 		#endfor
 		self.data = p[0]
