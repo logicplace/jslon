@@ -234,10 +234,11 @@ class JSLON(object):
 		parents, p = [], [None, None]
 		# p is cur, curIdx
 
-		def setval(x, key=None, p=p, dl=False):
+		def setval(cast, x, key=None, p=p, dl=False):
 			if key == ":":
 				p[1] = str(x)
 			else:
+				x = cast(x)
 				if p[1] is not None:
 					p[0][p[1]] = x
 					p[1] = None
@@ -270,8 +271,8 @@ class JSLON(object):
 
 			if flow:
 				if   flow == ":": continue # Already handled
-				elif flow == "{": setval(types.get("dict", dict)(), dl=True)
-				elif flow == "[": setval(types.get("list", list)(), dl=True)
+				elif flow == "{": setval(types.get("dict", dict), {}, dl=True)
+				elif flow == "[": setval(types.get("list", list), [], dl=True)
 				elif flow == "}": up("brace")
 				elif flow == "]": up("bracket")
 				elif flow == ",":
@@ -283,26 +284,26 @@ class JSLON(object):
 					regex.replace(r'\/', "/"),
 					(re.I if "i" in reflags else 0) | (re.M if "m" in reflags else 0)
 				))
-			elif string: setval(types.get("string", unicode)(JSLON.__unescapeString(string)), listget(tokens, i + 1)[0])
-			elif hexnum: setval(types.get("int", int)(int(hexnum, 16)))
+			elif string: setval(types.get("string", unicode), JSLON.__unescapeString(string), listget(tokens, i + 1)[0])
+			elif hexnum: setval(types.get("int", int), int(hexnum, 16))
 			elif afloat:
 				# Special case.
 				if afloat == ".": setval(0)
 				# In JavaScript, #.0* is int type, not float.
-				elif afloat.replace("0", "")[-1] == ".": setval(types.get("int", int)(int(afloat[0:afloat.index(".")])))
-				else: setval(types.get("float", float)(float(afloat)))
+				elif afloat.replace("0", "")[-1] == ".": setval(types.get("int", int), int(afloat[0:afloat.index(".")]))
+				else: setval(types.get("float", float), float(afloat))
 			elif num:
-				if num[0] == "0": setval(types.get("int", int)(int(num, 8)))
-				else: setval(types.get("int", int)(int(num)))
+				if num[0] == "0": setval(types.get("int", int), int(num, 8))
+				else: setval(types.get("int", int), int(num))
 			elif const:
 				nextFlow = listget(tokens, i + 1)[0]
 				if nextFlow == ":": setval(const, nextFlow)
-				elif const == "Infinity":  setval(types.get("float", float)(float("inf")))
-				elif const == "NaN":       setval(types.get("float", float)(float("nan")))
-				elif const == "true":      setval(types.get("bool", bool)(True))
-				elif const == "false":     setval(types.get("bool", bool)(False))
-				elif const == "null":      setval(types.get("null", None))
-				elif const == "undefined": setval(types.get("undefined", undefined)())
+				elif const == "Infinity":  setval(types.get("float", float), float("inf"))
+				elif const == "NaN":       setval(types.get("float", float), float("nan"))
+				elif const == "true":      setval(types.get("bool", bool), True)
+				elif const == "false":     setval(types.get("bool", bool), False)
+				elif const == "null":      setval(None, types.get("null", None))
+				elif const == "undefined": setval(types.get("undefined", undefined), None)
 			#endif
 		#endfor
 		self.data = p[0]
