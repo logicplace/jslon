@@ -353,5 +353,5 @@ class JSLON(object):
 	def viewvalues(self):            return self.data.viewvalues()
 #endclass
 
-def parse(string): return JSLON().parse(string).data
+def parse(string, types={}): return JSLON().parse(string, types={}).data
 def stringify(obj, opts = {}): return JSLON(obj).stringify(opts)
