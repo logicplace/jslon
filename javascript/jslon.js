@@ -4,7 +4,7 @@
  */
 
 JSLON = (function() {
-var specification = /[\[{\]},:]|\s+|\/\*[\s\S]*\*\/|\/\/.*|"(\\.|\\(\r?\n|\n?\r)|[^"])*"|'(\\.|\\(\r?\n|\n?\r)|[^'])*'|\/(\\.|[^\/])+\/[igm]*|[$_a-zA-Z][$_a-zA-Z0-9]*|[+\-]?0x[0-9a-fA-F]+|[+\-]?[0-9]+e[+\-]?[0-9]*|[+\-]?[0-9]*\.[0-9]*|[+\-]?[0-9]+|Infinity|NaN|true|false|null|undefined/g
+var specification = /[\[{\]},:]|\s+|\/\*[\s\S]*?\*\/|\/\/.*|"(\\.|\\(\r?\n|\n?\r)|[^"])*"|'(\\.|\\(\r?\n|\n?\r)|[^'])*'|\/(\\.|[^\/])+\/[igm]*|[$_a-zA-Z][$_a-zA-Z0-9]*|[+\-]?0x[0-9a-fA-F]+|[+\-]?[0-9]+e[+\-]?[0-9]*|[+\-]?[0-9]*\.[0-9]*|[+\-]?[0-9]+|Infinity|NaN|true|false|null|undefined/g
 
 function usO(a, v){ return String.fromCharCode(parseInt(v,  8)); }
 function usX(a, v){ return String.fromCharCode(parseInt(v, 16)); }
@@ -191,7 +191,7 @@ return {
 		//Remove junk
 		var newTokens = [];
 		for(var i=0; i < tokens.length; ++i) {
-			if(!tokens[i].match(/^(\s+|\/\*[\s\S]*\*\/|\/\/.*)$/)) {
+			if(!tokens[i].match(/^(\s+|\/\*[\s\S]*?\*\/|\/\/.*)$/)) {
 				newTokens.push(tokens[i]);
 			}
 		}

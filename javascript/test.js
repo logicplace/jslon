@@ -70,6 +70,14 @@ fs.readFile("../test.jslon", "utf8", function(err, data) {
 		}
 	}
 
+	// Other parse tests
+	try {
+		var doubleBlocks = JSLON.parse('/* Comment */ "Not comment */"');
+		comp("DoubleBlocks", "Not comment */", doubleBlocks);
+	} catch (e) {
+		comp("DoubleBlocks", 'String "Not comment */"', "Error: " + e.message);
+	}
+
 	console.log("\n====== stringify ======");
 	comp("Number", "687123", JSLON.stringify(687123));
 	comp("Floating point number", "10.4", JSLON.stringify(10.4));
@@ -107,4 +115,3 @@ fs.readFile("../test.jslon", "utf8", function(err, data) {
 		JSLON.stringify([1, 2, 3, 4, 5], {entriesPerLine: 2, depth: " "})
 	);
 });
-
