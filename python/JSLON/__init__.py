@@ -5,6 +5,12 @@
 
 import re
 
+try: unicode
+except NameError: unicode = str
+
+try: long
+except NameError: long = int
+
 class undefined(object):
 	def __nonzero__(self): return False
 	def __eq__(self, other): return other == undefined or self.__class__ == other.__class__
@@ -144,7 +150,7 @@ class JSLON(object):
 		objtype = type(obj)
 		if   obj is None: return "null"
 		elif obj == undefined: return "undefined"
-		elif objtype == dict:
+		elif hasattr(obj, "items"):
 			ret, entries = u"{", 0
 			depth += nextDepth
 			if opts["openOwnLine"]: ret += u"\n" + depth;
