@@ -11,6 +11,9 @@ except NameError: unicode = str
 try: long
 except NameError: long = int
 
+try: unichr
+except NameError: unichr = chr
+
 class undefined(object):
 	def __nonzero__(self): return False
 	def __eq__(self, other): return other == undefined or self.__class__ == other.__class__
@@ -244,7 +247,7 @@ class JSLON(object):
 			if key == ":":
 				p[1] = str(x)
 			else:
-				x = cast(x)
+				if cast is not None: x = cast(x)
 				if p[1] is not None:
 					p[0][p[1]] = x
 					p[1] = None
