@@ -272,10 +272,10 @@ class JSLON(object):
 			else: return [None]
 		#enddef
 
-		tokens = JSLON.__specification.findall(string)
+		tokens = [x.groups() for x in JSLON.__specification.finditer(string)]
 		for i, token in enumerate(tokens):
 			flow, sstr, dstr, regex, reflags, const, uqkey, hexnum, efloat, dfloat, num = token
-			string = sstr or dstr or uqkey
+			string = (uqkey if dstr is None else dstr) if sstr is None else sstr
 			afloat = efloat or dfloat
 
 			if flow:
@@ -293,7 +293,8 @@ class JSLON(object):
 					regex.replace(r'\/', "/"),
 					(re.I if "i" in reflags else 0) | (re.M if "m" in reflags else 0)
 				))
-			elif string: setval(types.get("string", unicode), JSLON.__unescapeString(string), listget(tokens, i + 1)[0])
+			elif string is not None:
+				setval(types.get("string", unicode), JSLON.__unescapeString(string), listget(tokens, i + 1)[0])
 			elif hexnum: setval(types.get("int", int), int(hexnum, 16))
 			elif afloat:
 				# Special case.
