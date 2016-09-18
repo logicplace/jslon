@@ -60,7 +60,7 @@ class JSLON(object):
 	)
 
 	__escspec    = re.compile(r'(c?)([oOx]?)(u?)')
-	__badchars   = re.compile(r'[^ -\[\]-~'"'"'"]')
+	__badchars   = re.compile(r'[^ !#$%&(-\[\]-~]')
 	__validkey   = re.compile(r'^[$_a-zA-Z][$_a-zA-Z0-9]*$')
 	__endswithnl = re.compile(r'[\r\n]\s*$')
 
@@ -108,7 +108,7 @@ class JSLON(object):
 			cc = ord(m)
 			if m == "\\": return u"\\\\"
 			elif m == q: return u"\\" + q
-			elif m == "'" or m == '"': return m
+			elif m == "'" or m == '"': return u"\\" + m
 			elif esc[0] and m == "\n": return u"\\n"
 			elif esc[0] and m == "\t": return u"\\t"
 			elif esc[0] and m == "\r": return u"\\r"
