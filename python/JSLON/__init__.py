@@ -103,12 +103,13 @@ class JSLON(object):
 			esc = ("c", "", "u")
 		#endif
 
+
 		def esBC(mo):
 			m = mo.group(0)
 			cc = ord(m)
 			if m == "\\": return u"\\\\"
 			elif m == q: return u"\\" + q
-			elif m == "'" or m == '"': return u"\\" + m
+			elif m in ("'", '"'): return m
 			elif esc[0] and m == "\n": return u"\\n"
 			elif esc[0] and m == "\t": return u"\\t"
 			elif esc[0] and m == "\r": return u"\\r"
